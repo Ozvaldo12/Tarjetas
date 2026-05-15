@@ -42,6 +42,7 @@ const filteredCards = computed(() => {
   }
   // 'custom' order es el default
   
+  console.log('[DashboardView] filteredCards calculado:', result.length, 'tarjetas encontradas.')
   return result
 })
 

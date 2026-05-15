@@ -10,12 +10,13 @@ import {
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement
+  LineElement,
+  Filler
 } from 'chart.js'
 import { useCardsStore } from '@/stores/useCardsStore'
 import { useCalculations } from '@/composables/useCalculations'
 
-ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, PointElement, LineElement)
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, PointElement, LineElement, Filler)
 
 const store = useCardsStore()
 const { calculateGlobalProjections } = useCalculations()
