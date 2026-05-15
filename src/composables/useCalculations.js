@@ -36,7 +36,8 @@ export function useCalculations() {
     let Debt_Next = 0
     let Total_Active_Debt = 0
 
-    card.purchases.forEach(p => {
+    const purchases = card.purchases || []
+    purchases.forEach(p => {
       const pDate = new Date(p.date + "T12:00:00")
 
       let baseCutoff = getSafeDate(pDate.getFullYear(), pDate.getMonth(), card.cutoffDay)
@@ -132,11 +133,80 @@ export function useCalculations() {
     return paidMonths
   }
 
+  function calculateGlobalProjections(cards) {
+    const today = new Date()
+    today.setHours(12, 0, 0, 0)
+    
+    const projections = []
+    
+    // Generar las columnas (próximos 12 meses)
+    for (let i = 0; i < 12; i++) {
+      const projDate = new Date(today.getFullYear(), today.getMonth() + i, 1)
+      projections.push({
+        key: getMonthKey(projDate),
+        label: projDate.toLocaleDateString('es-MX', { month: 'short', year: '2-digit' }).toUpperCase(),
+        total: 0
+      })
+    }
+
+    cards.forEach(card => {
+      const purchases = card.purchases || []
+      
+      purchases.forEach(p => {
+        const pDate = new Date(p.date + "T12:00:00")
+        let baseCutoff = getSafeDate(pDate.getFullYear(), pDate.getMonth(), card.cutoffDay)
+        if (pDate > baseCutoff) {
+          baseCutoff = getSafeDate(pDate.getFullYear(), pDate.getMonth() + 1, card.cutoffDay)
+        }
+
+        if (p.isRecurring) {
+          projections.forEach(proj => {
+            proj.total += p.amount
+          })
+          return
+        }
+
+        if (p.isMSI) {
+          const monthly = p.amount / p.months
+          for (let i = 0; i < p.months; i++) {
+            const instCutoff = getSafeDate(baseCutoff.getFullYear(), baseCutoff.getMonth() + i, card.cutoffDay)
+            const instPayment = new Date(instCutoff)
+            instPayment.setDate(instPayment.getDate() + card.paymentDays)
+
+            if (instPayment < today) continue
+
+            const paymentKey = getMonthKey(instPayment)
+            const projObj = projections.find(pr => pr.key === paymentKey)
+            if (projObj) {
+              projObj.total += monthly
+            }
+          }
+          return
+        }
+
+        // Compra normal
+        const paymentDate = new Date(baseCutoff)
+        paymentDate.setDate(paymentDate.getDate() + card.paymentDays)
+
+        if (paymentDate < today) return
+
+        const paymentKey = getMonthKey(paymentDate)
+        const projObj = projections.find(pr => pr.key === paymentKey)
+        if (projObj) {
+          projObj.total += p.amount
+        }
+      })
+    })
+
+    return projections
+  }
+
   return {
     getSafeDate,
     formatDateUI,
     getMonthKey,
     calculateCardCycles,
-    calculateMSIPaidMonths
+    calculateMSIPaidMonths,
+    calculateGlobalProjections
   }
 }
