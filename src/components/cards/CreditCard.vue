@@ -38,9 +38,13 @@ const diffDays = computed(() => {
   return Math.ceil((cycles.value.P_curr - new Date()) / (1000 * 60 * 60 * 24))
 })
 
-const handleDelete = () => {
+const handleDelete = async () => {
   if(confirm(`¿Estás seguro de eliminar la tarjeta ${props.card.name}?`)) {
-    store.deleteCard(props.card.id)
+    try {
+      await store.deleteCard(props.card.id)
+    } catch(error) {
+      alert("Error al eliminar la tarjeta. Revisa la consola.")
+    }
   }
 }
 
@@ -57,22 +61,27 @@ const newPurchase = ref({
 
 const categorias = ["Comida", "Transporte", "Suscripciones", "Salud", "Hogar", "Entretenimiento", "Otros"]
 
-const handleAddPurchase = () => {
+const handleAddPurchase = async () => {
   const purchaseData = {
     ...newPurchase.value,
     id: crypto.randomUUID()
   }
   const updatedPurchases = [...props.card.purchases, purchaseData]
-  store.updateCard(props.card.id, { 
-    purchases: updatedPurchases,
-    usedBalance: props.card.usedBalance + (purchaseData.isRecurring ? 0 : purchaseData.amount)
-  })
   
-  // Reset
-  newPurchase.value = {
-    description: '', amount: null, category: 'Otros',
-    date: new Date().toISOString().split('T')[0],
-    isMSI: false, months: 3, isRecurring: false
+  try {
+    await store.updateCard(props.card.id, { 
+      purchases: updatedPurchases,
+      usedBalance: props.card.usedBalance + (purchaseData.isRecurring ? 0 : purchaseData.amount)
+    })
+    
+    // Reset
+    newPurchase.value = {
+      description: '', amount: null, category: 'Otros',
+      date: new Date().toISOString().split('T')[0],
+      isMSI: false, months: 3, isRecurring: false
+    }
+  } catch (error) {
+    alert("Error al registrar la compra. Revisa la consola.")
   }
 }
 </script>

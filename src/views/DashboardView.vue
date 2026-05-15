@@ -27,8 +27,12 @@ const handleLogout = async () => {
 }
 
 const handleAddCard = async (cardData) => {
-  await cardsStore.addCard(cardData)
-  showAddModal.value = false
+  try {
+    await cardsStore.addCard(cardData)
+    showAddModal.value = false
+  } catch (error) {
+    alert("Error al agregar la tarjeta. Revisa la consola.")
+  }
 }
 </script>
 
