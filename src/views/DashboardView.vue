@@ -47,6 +47,8 @@ const filteredCards = computed(() => {
 })
 
 onMounted(() => {
+  console.log('Dashboard mounted')
+  console.log('[DashboardView] Estado de tarjetas:', cardsStore.cards)
   cardsStore.fetchCards()
 })
 
@@ -67,6 +69,8 @@ const handleAddCard = async (cardData) => {
     alert("Error al agregar la tarjeta. Revisa la consola.")
   }
 }
+
+console.log('[DashboardView] setup() finalizado correctamente, esperando render.')
 </script>
 
 <template>

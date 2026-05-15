@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useCalculations } from '@/composables/useCalculations'
 import { useCardsStore } from '@/stores/useCardsStore'
 
