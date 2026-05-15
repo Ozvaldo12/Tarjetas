@@ -66,7 +66,8 @@ const handleAddPurchase = async () => {
     ...newPurchase.value,
     id: crypto.randomUUID()
   }
-  const updatedPurchases = [...props.card.purchases, purchaseData]
+  const currentPurchases = props.card.purchases || []
+  const updatedPurchases = [...currentPurchases, purchaseData]
   
   try {
     await store.updateCard(props.card.id, { 
@@ -186,8 +187,8 @@ const handleAddPurchase = async () => {
       
       <!-- Lista de Compras Recientes -->
       <div class="flex-grow overflow-y-auto max-h-48 pr-1 space-y-2.5 custom-scrollbar">
-        <p v-if="card.purchases.length === 0" class="text-xs text-center italic text-slate-400 py-4">No hay movimientos.</p>
-        <div v-for="p in card.purchases.slice().reverse()" :key="p.id" class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-slate-100">
+        <p v-if="!card.purchases || card.purchases.length === 0" class="text-xs text-center italic text-slate-400 py-4">No hay movimientos.</p>
+        <div v-for="p in (card.purchases || []).slice().reverse()" :key="p.id" class="flex justify-between items-center bg-slate-50 p-2 rounded-lg border border-slate-100">
           <div>
             <p class="text-xs font-bold text-slate-700">{{ p.description }}</p>
             <p class="text-[10px] text-slate-500">{{ p.date }} <span v-if="p.isMSI" class="ml-1 text-blue-600 font-semibold">{{ p.months }} MSI</span></p>
