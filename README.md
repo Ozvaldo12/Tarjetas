@@ -56,9 +56,19 @@ La configuración se encuentra en `.github/workflows/deploy.yml`.
 
 ## Documentación Técnica
 
-La documentación completa del proyecto, incluyendo arquitectura, flujos de datos, configuración PWA, debugging y decisiones técnicas se encuentra en:
+La documentación completa del proyecto se organiza en dos niveles:
 
-📄 **[docs/contexto_completo_proyecto.md](docs/contexto_completo_proyecto.md)**
+📄 **[docs/contexto_completo_proyecto.md](docs/contexto_completo_proyecto.md)** — Arquitectura base y contexto general
+
+📁 **[docs/versions/](docs/versions/)** — Historial de cambios por versión
+
+---
+
+## Historial de Versiones
+
+| Versión | Fecha | Descripción |
+|---------|-------|-------------|
+| [v1.0](docs/versions/v1.0.md) | Mayo 2026 | Release inicial: PWA, Firebase, GitHub Pages, arquitectura modular, CRUD compras |
 
 ---
 
@@ -67,16 +77,19 @@ La documentación completa del proyecto, incluyendo arquitectura, flujos de dato
 ```
 Tarjetas/
 ├── docs/
-│   └── contexto_completo_proyecto.md   # Documentación técnica completa
+│   ├── contexto_completo_proyecto.md   # Documentación base arquitectónica
+│   └── versions/
+│       └── v1.0.md                     # Release inicial estable
 ├── public/
 │   └── img/                            # Iconos PWA
 ├── src/
+│   ├── layouts/                        # AppLayout (sidebar + bottom nav)
+│   ├── views/                          # 7 vistas (Dashboard, Compras, Tarjetas, etc.)
 │   ├── components/                     # Componentes Vue reutilizables
-│   ├── composables/                    # Lógica compartida (cálculos)
+│   ├── composables/                    # Lógica compartida (cálculos, toasts)
 │   ├── router/                         # Vue Router (Hash History)
 │   ├── services/                       # Firebase init
-│   ├── stores/                         # Pinia (Auth + Cards)
-│   └── views/                          # Vistas principales
+│   └── stores/                         # Pinia (Auth + Cards)
 ├── .github/workflows/deploy.yml        # CI/CD automático
 ├── vite.config.js                      # Configuración Vite + PWA
 └── package.json
