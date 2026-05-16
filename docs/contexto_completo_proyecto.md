@@ -33,21 +33,27 @@ El **Gestor de Tarjetas** es una Aplicación Web de Página Única (SPA) moderna
 
 ```text
 tarjetas/
-├── .env                    # Variables de entorno locales
-├── .env.example            # Plantilla de variables de entorno
+├── .env                    # Variables de entorno locales (NO se sube a GitHub)
+├── .env.example            # Plantilla de variables (SÍ se sube a GitHub)
+├── .gitignore              # Excluye .env, node_modules, dist
 ├── index.html              # Punto de entrada HTML
 ├── package.json            # Dependencias y scripts
 ├── vite.config.js          # Configuración de Vite, base URL y PWA plugin
-├── tailwind.config.js      # Configuración de tokens de diseño y plugins
-├── postcss.config.js       # Procesador de Tailwind
+├── README.md               # Documentación de entrada del proyecto
+├── docs/
+│   └── contexto_completo_proyecto.md  # Documentación técnica completa
+├── .github/
+│   └── workflows/
+│       └── deploy.yml      # CI/CD automático a GitHub Pages
 ├── public/
-│   ├── favicon.ico
-│   ├── img/                # Iconos PWA (pwa-192x192.png, pwa-512x512.png) Creados físicamente.
-│   └── apple-touch-icon.png
+│   ├── favicon.svg
+│   ├── icons.svg
+│   └── img/                # Iconos PWA (pwa-192x192.png, pwa-512x512.png)
 └── src/
     ├── main.js             # Entrada JS (monta Vue, Pinia, Router, registra PWA SW)
     ├── App.vue             # Componente raíz (RouterView)
-    ├── style.css           # Estilos globales y directivas Tailwind (@tailwind)
+    ├── assets/
+    │   └── index.css       # Estilos globales y directivas Tailwind
     ├── router/
     │   └── index.js        # Definición de rutas (Hash Mode) y Route Guards
     ├── services/
@@ -72,6 +78,12 @@ tarjetas/
         └── modals/
             └── AddCardModal.vue   # Modal para registrar nueva tarjeta
 ```
+
+### Carpeta `docs/`
+La carpeta `docs/` fue creada para centralizar la documentación técnica del proyecto dentro del propio repositorio. Su propósito principal es:
+* **Persistencia:** El archivo `contexto_completo_proyecto.md` sirve como contexto persistente para futuras sesiones con agentes de IA (Antigravity), evitando la necesidad de re-explicar la arquitectura en cada conversación.
+* **Accesibilidad:** Al vivir dentro del repositorio, cualquier desarrollador o agente puede acceder a la documentación directamente con un `git clone`.
+* **Versionado:** Al estar bajo control de versiones, cada cambio en la documentación queda registrado en el historial de commits.
 
 ---
 
@@ -235,11 +247,32 @@ Durante el desarrollo se encontró un defecto grave de **404 File Not Found** al
 
 ---
 
-## 11. VARIABLES DE ENTORNO
+## 11. VARIABLES DE ENTORNO Y SEGURIDAD
 
-* **`.env`:** Contiene las credenciales reales de Firebase. NO DEBE subirse a GitHub (`.gitignore` lo excluye).
-* **`.env.example`:** Contiene la estructura de las variables para que otros desarrolladores sepan qué configurar.
-* Prefijo **`VITE_`:** Vite solo expone en el código cliente las variables que empiecen con `VITE_`.
+### Arquitectura de archivos de entorno
+El proyecto maneja tres archivos relacionados con variables de entorno, cada uno con un propósito distinto:
+
+| Archivo | ¿Se sube a GitHub? | Propósito |
+|---------|--------------------|-----------|
+| `.env` | ❌ **NUNCA** | Contiene las credenciales reales de Firebase. Solo existe localmente. |
+| `.env.example` | ✅ Sí | Plantilla con la estructura de las variables (sin valores reales) para que otros desarrolladores sepan qué configurar. |
+| `.gitignore` | ✅ Sí | Contiene la regla que excluye `.env`, `.env.local` y `.env.*.local` del tracking de git. |
+
+### Cómo Vite inyecta las variables
+Vite utiliza el mecanismo `import.meta.env` para exponer variables de entorno al código del cliente. **Solo las variables que comienzan con el prefijo `VITE_` son accesibles** desde el código fuente. En `src/services/firebase.js`:
+```js
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+}
+```
+Durante `npm run build`, Vite reemplaza estáticamente cada `import.meta.env.VITE_*` por su valor literal en el bundle de producción. Si la variable no existe, se inyecta `undefined`, lo cual provoca un crash silencioso de Firebase.
+
+### Plantilla `.env.example`
 ```env
 VITE_FIREBASE_API_KEY=tu-api-key
 VITE_FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
@@ -248,6 +281,28 @@ VITE_FIREBASE_STORAGE_BUCKET=tu-proyecto.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=tu-sender-id
 VITE_FIREBASE_APP_ID=tu-app-id
 ```
+
+### GitHub Actions y GitHub Secrets
+Al no existir `.env` en el repositorio remoto, el pipeline de CI/CD (GitHub Actions) necesita otra fuente para las variables. Se configuraron **GitHub Repository Secrets** que se inyectan como variables de entorno en el step de build del workflow:
+```yaml
+# .github/workflows/deploy.yml
+- name: Build project
+  run: npm run build
+  env:
+    VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+    VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.VITE_FIREBASE_AUTH_DOMAIN }}
+    VITE_FIREBASE_PROJECT_ID: ${{ secrets.VITE_FIREBASE_PROJECT_ID }}
+    VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.VITE_FIREBASE_STORAGE_BUCKET }}
+    VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.VITE_FIREBASE_MESSAGING_SENDER_ID }}
+    VITE_FIREBASE_APP_ID: ${{ secrets.VITE_FIREBASE_APP_ID }}
+```
+Estos secrets se configuran en: **GitHub.com → Repositorio → Settings → Secrets and variables → Actions**.
+
+### Riesgos de exponer credenciales Firebase
+Aunque Firebase utiliza reglas de seguridad del lado del servidor (Firestore Rules, Auth Rules), exponer las credenciales públicamente permite que actores maliciosos:
+* Creen cuentas masivas en tu proyecto Firebase Auth (abuse de cuota).
+* Envíen peticiones arbitrarias contra tu proyecto, consumiendo tu plan gratuito o de pago.
+* Intenten explotar configuraciones de reglas incorrectas.
 
 ---
 
@@ -271,6 +326,12 @@ Esta sección detalla los problemas críticos enfrentados durante la migración 
 4. **GitHub Pages devolvía 404 para assets**
    * **Causa:** Vite asume que la app corre en la raíz de un dominio (`/`). En GitHub Pages, corre en un subdirectorio (`/Tarjetas/`).
    * **Solución:** Modificar `vite.config.js` agregando `base: '/Tarjetas/'`.
+
+5. **Pantalla blanca tras eliminar `.env` del tracking de Git**
+   * **Causa raíz:** Se ejecutó `git rm --cached .env` para proteger las credenciales Firebase. Esto eliminó correctamente el archivo del repositorio remoto, pero GitHub Actions (que clona el repo para hacer el build) dejó de encontrar las variables `VITE_FIREBASE_*`. Vite compiló el bundle con todas las variables como `undefined`.
+   * **Efecto en cadena:** `initializeApp()` de Firebase recibió `apiKey: undefined` → Firebase crasheó silenciosamente al inicializar → `useAuthStore` no pudo resolver `onAuthStateChanged` → el Route Guard redirigía al login infinitamente o el render abortaba → **pantalla blanca completa** en producción.
+   * **Diagnóstico:** Se verificó que `.env` seguía existiendo localmente (el build local funcionaba). Se identificó que el problema era exclusivo del pipeline remoto de GitHub Actions que ya no tenía acceso al archivo.
+   * **Solución:** Se configuraron **GitHub Repository Secrets** con las 6 variables Firebase y se modificó `.github/workflows/deploy.yml` para inyectarlas como `env:` en el step de build. Se disparó un rebuild con un commit vacío y el deploy completó exitosamente.
 
 ---
 
@@ -334,9 +395,15 @@ graph TD;
 ✅ **PWA funcional**
 ✅ **Instalable en Android/Desktop**
 ✅ **Routing compatible con GitHub Pages**
+✅ **Variables de entorno restauradas**
+✅ **Firebase operativo nuevamente**
+✅ **Protección de credenciales implementada (GitHub Secrets)**
+✅ **Documentación centralizada en `docs/`**
+✅ **README.md profesional con referencia a docs**
 ✅ **Service Worker funcionando**
-✅ **Actualizaciones automáticas habilitadas**
+✅ **Actualizaciones automáticas PWA funcionando**
 ✅ **Firebase sincronizado multi-dispositivo**
+✅ **CI/CD automatizado vía GitHub Actions**
 
 ---
 
@@ -354,7 +421,7 @@ Para conservar la aplicación sana a lo largo de las fases posteriores al lanzam
 El proceso completo para actualizar la app instalada de todos tus usuarios está automatizado:
 1. Realizar los cambios en local.
 2. Hacer commit y subir el código base al repo: `git push origin main`.
-3. GitHub Actions tomará el código e internamente ejecutará `npm run build`.
+3. GitHub Actions tomará el código, inyectará las variables Firebase desde **GitHub Secrets** e internamente ejecutará `npm run build`.
 4. El Action publicará la carpeta empaquetada `/dist/` automáticamente en GitHub Pages.
 5. El Service Worker de los navegadores de los usuarios detectará la actualización silenciosa, bajará la caché nueva y la app se **actualizará de forma automática** en su dispositivo sin requerir reinstalación de la PWA.
 
@@ -367,3 +434,32 @@ Existen propiedades estructurales de la app que **NO DEBEN** modificarse. Su alt
 * **Estructura de `public/img`**: Evitar mover los íconos (Ej. no llevarlos a `src/assets`), Vite y el webmanifest exigen que queden en el directorio raíz servido.
 * **Router Hash History:** Volver a usar `createWebHistory()` matará las recargas completas y accesos URL limpios originando un Error 404 del host.
 * **Modificar rutas de Firebase sin scripts de migración:** Alterar el Schema de la base de datos Firestore (e.g. cambiar `/users` por `/clientes`) desconectará y corromperá todos los datos previos almacenados.
+* **GitHub Secrets:** Si se rotan las credenciales de Firebase, es obligatorio actualizar los 6 secrets en GitHub.com → Settings → Secrets para que el build no falle.
+
+---
+
+## 19. README.md Y DOCUMENTACIÓN TÉCNICA
+
+* El archivo `README.md` fue modernizado para servir como punto de entrada profesional del proyecto. Contiene:
+  * Descripción del proyecto y enlace a la demo en vivo.
+  * Tabla de tecnologías utilizadas.
+  * Instrucciones de instalación local y configuración de `.env`.
+  * Explicación del flujo de deploy automático.
+  * Enlace directo a `docs/contexto_completo_proyecto.md`.
+  * Estructura visual del repositorio.
+* Cualquier nuevo desarrollador o agente de IA puede leer el `README.md` como primer paso y luego profundizar en `docs/` para obtener el contexto técnico completo.
+
+---
+
+## 20. BUENAS PRÁCTICAS DE SEGURIDAD Y DESPLIEGUE
+
+Reglas de seguridad y despliegue que deben seguirse de manera estricta:
+
+1. **Nunca subir `.env` al repositorio.** Las credenciales Firebase deben vivir exclusivamente en el archivo local y en GitHub Secrets. El `.gitignore` ya incluye las reglas para excluirlo.
+2. **Mantener `.env.example` actualizado.** Si se agregan nuevas variables de entorno, actualizar también la plantilla para que otros desarrolladores sepan qué configurar.
+3. **Verificar `.gitignore` antes de cada commit.** Ejecutar `git status` y confirmar que `.env` no aparece en la lista de archivos staged.
+4. **Validar el build local antes de hacer push.** Ejecutar `npm run build` localmente y verificar que no haya errores antes de disparar el pipeline de GitHub Actions.
+5. **Verificar Firebase antes de publicar.** Confirmar que las reglas de Firestore estén correctamente configuradas y que `onAuthStateChanged` resuelva sin errores.
+6. **No exponer secretos en logs ni en código.** No usar `console.log(import.meta.env.VITE_FIREBASE_API_KEY)` en producción.
+7. **Rotar credenciales si se exponen.** Si las credenciales Firebase se filtraron en algún commit público, rotarlas inmediatamente desde la consola de Firebase y actualizar los GitHub Secrets.
+8. **Revisar los GitHub Actions después de cada push.** Entrar a la pestaña Actions del repositorio y confirmar que el deploy terminó con estado `success` (✅).
