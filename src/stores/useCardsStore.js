@@ -28,6 +28,8 @@ export const useCardsStore = defineStore('cards', () => {
     }
 
     console.log(`[fetchCards] Iniciando sync para user: ${authStore.user.uid}`)
+    // Detener listener anterior si existe
+    if (unsubscribe) { unsubscribe(); unsubscribe = null }
     loading.value = true
     const q = query(collection(db, `users/${authStore.user.uid}/cards`))
     
@@ -108,6 +110,91 @@ export const useCardsStore = defineStore('cards', () => {
     }
   }
 
+  // --- CRUD de Compras ---
+
+  const addPurchaseToCard = async (cardId, purchaseData) => {
+    const card = cards.value.find(c => c.id === cardId)
+    if (!card) throw new Error('Tarjeta no encontrada')
+
+    const purchase = {
+      ...purchaseData,
+      id: crypto.randomUUID()
+    }
+    const currentPurchases = card.purchases || []
+    const updatedPurchases = [...currentPurchases, purchase]
+
+    // Recalcular usedBalance: sumar montos de compras no recurrentes
+    const newUsedBalance = updatedPurchases
+      .filter(p => !p.isRecurring)
+      .reduce((sum, p) => sum + p.amount, 0)
+
+    await updateCard(cardId, {
+      purchases: updatedPurchases,
+      usedBalance: newUsedBalance
+    })
+
+    return purchase
+  }
+
+  const updatePurchase = async (cardId, purchaseId, updatedData) => {
+    const card = cards.value.find(c => c.id === cardId)
+    if (!card) throw new Error('Tarjeta no encontrada')
+
+    const currentPurchases = card.purchases || []
+    const updatedPurchases = currentPurchases.map(p => {
+      if (p.id === purchaseId) {
+        return { ...p, ...updatedData }
+      }
+      return p
+    })
+
+    // Recalcular usedBalance
+    const newUsedBalance = updatedPurchases
+      .filter(p => !p.isRecurring)
+      .reduce((sum, p) => sum + p.amount, 0)
+
+    await updateCard(cardId, {
+      purchases: updatedPurchases,
+      usedBalance: newUsedBalance
+    })
+  }
+
+  const deletePurchase = async (cardId, purchaseId) => {
+    const card = cards.value.find(c => c.id === cardId)
+    if (!card) throw new Error('Tarjeta no encontrada')
+
+    const currentPurchases = card.purchases || []
+    const updatedPurchases = currentPurchases.filter(p => p.id !== purchaseId)
+
+    // Recalcular usedBalance
+    const newUsedBalance = updatedPurchases
+      .filter(p => !p.isRecurring)
+      .reduce((sum, p) => sum + p.amount, 0)
+
+    await updateCard(cardId, {
+      purchases: updatedPurchases,
+      usedBalance: newUsedBalance
+    })
+  }
+
+  // Getter: Todas las compras de todas las tarjetas, con info de tarjeta
+  const allPurchases = computed(() => {
+    const all = []
+    cards.value.forEach(card => {
+      const purchases = card.purchases || []
+      purchases.forEach(p => {
+        all.push({
+          ...p,
+          cardId: card.id,
+          cardName: card.name
+        })
+      })
+    })
+    // Ordenar por fecha descendente
+    all.sort((a, b) => new Date(b.date) - new Date(a.date))
+    return all
+  })
+
   // Getters globales (Dashboard)
   const globalStats = computed(() => {
     let totalLimit = 0
@@ -133,6 +220,10 @@ export const useCardsStore = defineStore('cards', () => {
     updateCard,
     deleteCard,
     reorderCards,
+    addPurchaseToCard,
+    updatePurchase,
+    deletePurchase,
+    allPurchases,
     globalStats
   }
 })

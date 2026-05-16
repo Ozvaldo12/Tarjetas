@@ -18,9 +18,35 @@ const router = createRouter({
     },
     {
       path: '/',
-      name: 'dashboard',
-      component: () => import('@/views/DashboardView.vue'),
-      meta: { requiresAuth: true }
+      component: () => import('@/layouts/AppLayout.vue'),
+      meta: { requiresAuth: true },
+      children: [
+        {
+          path: '',
+          name: 'dashboard',
+          component: () => import('@/views/DashboardView.vue')
+        },
+        {
+          path: 'compras',
+          name: 'compras',
+          component: () => import('@/views/PurchasesView.vue')
+        },
+        {
+          path: 'tarjetas',
+          name: 'tarjetas',
+          component: () => import('@/views/CardsView.vue')
+        },
+        {
+          path: 'proyecciones',
+          name: 'proyecciones',
+          component: () => import('@/views/ProjectionsView.vue')
+        },
+        {
+          path: 'configuracion',
+          name: 'configuracion',
+          component: () => import('@/views/SettingsView.vue')
+        }
+      ]
     }
   ]
 })
