@@ -191,8 +191,9 @@ Configurada a través de `vite-plugin-pwa` en `vite.config.js`.
 
 ### Actualización de configuración PWA
 Para que el proyecto cumpliera con todos los estándares modernos de instalación, se realizaron las siguientes correcciones de compatibilidad integrales:
-* **Creación de iconos físicos:** Se añadieron los archivos requeridos obligatoriamente `public/img/pwa-192x192.png` y `public/img/pwa-512x512.png`.
-* **Rutas relativas:** Se corrigieron los problemas de rutas absolutas (`/img/pwa.png` -> `img/pwa.png`) en `vite.config.js` asegurando compatibilidad completa con la opción `base: '/Tarjetas/'` generada por Vite.
+* **Iconos físicos y Maskable:** Se usan imágenes de alta resolución derivadas de un máster de 4096x4096, exportadas como `public/img/pwa-192x192-v2.png` y `public/img/pwa-512x512-v2.png`. Estos incluyen `purpose: 'any maskable'` en el manifest, lo que permite a Android adaptar el icono a cualquier forma (círculo, lágrima, etc.) garantizando una integración visual perfecta sin bordes blancos no deseados. Adicionalmente, se incluye un `apple-touch-icon.png` (180x180) para compatibilidad nativa con "Añadir a pantalla de inicio" en iOS.
+* **Estrategia anti-caché:** Se utiliza el sufijo `-v2` en los nombres de archivo de los iconos para invalidar forzosamente cachés antiguas y asegurar que dispositivos con la app ya instalada actualicen visualmente su launcher.
+* **Rutas relativas:** Se corrigieron los problemas de rutas absolutas (`/img/pwa.png` -> `img/pwa-192x192-v2.png`) en `vite.config.js` asegurando compatibilidad completa con la opción `base: '/Tarjetas/'` generada por Vite.
 * **Propiedades finales del manifest:** El manifest incluye las siguientes propiedades rigurosas:
   ```js
   display: 'standalone' // Oculta la barra de navegación del sistema para comportarse como app nativa.
@@ -217,6 +218,15 @@ registerSW({
 * **Android Instalable:** La aplicación ya posee todos los requerimientos heurísticos de Lighthouse y **puede instalarse nativamente** sin problemas en sistemas Android y Escritorio.
 * **Compatibilidad de Navegadores:** `Samsung Internet` y navegadores afines detectarán al 100% y ofrecerán el badge PWA en la barra de URL. 
 * **Chrome Android:** Si Chrome en Android es algo restrictivo y decide no lanzar el "banner flotante" inmediatamente (debido a sus propias métricas de usuario), la instalación manual puede forzarse sin fallos desde: **Menú (tres puntos) → "Instalar aplicación" o "Agregar a pantalla principal"**.
+
+### Buenas prácticas visuales para Iconos PWA
+Para mantener la calidad del branding en futuras actualizaciones, se deben seguir estas reglas al generar nuevos iconos:
+* **Usar imagen máster de alta resolución:** Utilizar siempre un PNG base de al menos `4096x4096`. Esto garantiza un escalado perfecto sin pérdida de nitidez al generar las variantes de `192px` y `512px`.
+* **Mantener relación 1:1:** El asset debe ser perfectamente cuadrado.
+* **Padding interno adecuado:** Dejar espacio (margen) entre los bordes de la imagen y el elemento principal del logo. Esto es crucial para que los iconos *maskable* funcionen bien cuando Android recorta la imagen en forma de círculo o gota.
+* **Evitar texto pequeño:** Los iconos se muestran en tamaños tan reducidos como `48x48` en algunos launchers. El texto pequeño se volverá ilegible.
+* **Diseño simple y reconocible:** Priorizar formas sólidas y contrastes altos que destaquen tanto en modo claro como en modo oscuro.
+* **Propósito Maskable:** Siempre mantener `purpose: 'any maskable'` en el manifest para delegar el control de la forma final al sistema operativo del usuario.
 
 ---
 
@@ -393,7 +403,11 @@ graph TD;
 ## 16. ESTADO ACTUAL DEL PROYECTO
 
 ✅ **PWA funcional**
-✅ **Instalable en Android/Desktop**
+✅ **Iconos PWA profesionales actualizados (Máster 4096x4096)**
+✅ **Soporte maskable icons para integración visual Android**
+✅ **Caché visual controlada correctamente (-v2)**
+✅ **Branding visual actualizado**
+✅ **Instalable en Android/Desktop/iOS**
 ✅ **Routing compatible con GitHub Pages**
 ✅ **Variables de entorno restauradas**
 ✅ **Firebase operativo nuevamente**
