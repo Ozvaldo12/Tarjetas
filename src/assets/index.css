@@ -1,15 +1,48 @@
 @import "tailwindcss";
 
+/* ============================================================
+   SISTEMA DE COLORES v1.1
+   Paleta: Adobe Color — Verdes profundos financieros
+   Primario:  #5C8B32  (verde oliva profesional)
+   Dark nav:  #082901  (verde oscuro profundo)
+   Accent:    #8FBF45  (verde lima brillante)
+   ============================================================ */
+
 @theme {
-  --color-light-bg: #f8fafc;
-  --color-card-bg: #ffffff;
-  --color-text-main: #1e293b;
-  --color-text-muted: #64748b;
-  --color-primary: #2563eb;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
-  --color-border-light: #e2e8f0;
+  /* Fondos */
+  --color-light-bg:       #f4f7f0;
+  --color-card-bg:        #ffffff;
+  --color-surface:        #eef3e8;
+  --color-surface-2:      #e8f0df;
+
+  /* Textos */
+  --color-text-main:      #0f0e0b;
+  --color-text-muted:     #6b7c5e;
+  --color-text-subtle:    #8fa082;
+
+  /* Primarios (paleta verde) */
+  --color-primary:        #5c8b32;
+  --color-primary-dark:   #184000;
+  --color-primary-light:  #eef3e8;
+  --color-accent:         #8fbf45;
+  --color-accent-dark:    #5c8b32;
+
+  /* Sidebar */
+  --color-sidebar-bg:     #082901;
+  --color-sidebar-dark:   #184000;
+
+  /* Bordes */
+  --color-border:         #d4e0c8;
+  --color-border-light:   #e6eedf;
+
+  /* Estados */
+  --color-success:        #5c8b32;
+  --color-success-light:  #eef3e8;
+  --color-danger:         #c0392b;
+  --color-danger-light:   #fdecea;
+  --color-warning:        #d4801a;
+  --color-warning-light:  #fef3e2;
+  --color-info:           #5c8b32;
 }
 
 @layer base {
@@ -19,30 +52,53 @@
   }
 }
 
-/* Scrollbar personalizado */
-::-webkit-scrollbar { 
-  width: 8px; 
+/* Scrollbar personalizado — paleta verde */
+::-webkit-scrollbar {
+  width: 8px;
 }
-::-webkit-scrollbar-track { 
-  background: #f1f5f9; 
+::-webkit-scrollbar-track {
+  background: #eef3e8;
 }
-::-webkit-scrollbar-thumb { 
-  background: #cbd5e1; 
-  border-radius: 4px; 
+::-webkit-scrollbar-thumb {
+  background: #c0d4a8;
+  border-radius: 4px;
 }
-::-webkit-scrollbar-thumb:hover { 
-  background: #94a3b8; 
+::-webkit-scrollbar-thumb:hover {
+  background: #5c8b32;
 }
 
 /* Quitar flechas de inputs numéricos */
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
-.drag-over { 
-  border: 2px dashed var(--color-primary) !important; 
-  background-color: #eff6ff; 
-  opacity: 0.8; 
+/* Drag over — verde primario */
+.drag-over {
+  border: 2px dashed var(--color-primary) !important;
+  background-color: #eef3e8;
+  opacity: 0.8;
+}
+
+/* Utilitarios de color centralizados para reutilizar en componentes */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  transition: background-color 0.2s;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.badge-primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.badge-accent {
+  background-color: var(--color-accent);
+  color: var(--color-sidebar-bg);
+  font-weight: 700;
 }

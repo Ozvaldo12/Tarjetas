@@ -57,7 +57,7 @@ const filteredRecentPurchases = computed(() => {
 })
 const getTypeBadge = (p) => {
   if (p.isRecurring) return { label: 'Recurrente', cls: 'bg-purple-100 text-purple-700' }
-  if (p.isMSI) return { label: `${p.months} MSI`, cls: 'bg-blue-100 text-blue-700' }
+  if (p.isMSI) return { label: `${p.months} MSI`, cls: 'bg-green-100 text-green-800' }
   return { label: 'Normal', cls: 'bg-slate-100 text-slate-600' }
 }
 </script>
@@ -65,19 +65,19 @@ const getTypeBadge = (p) => {
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2" style="color: #0f0e0b;">
         <span class="text-2xl">🛒</span> Compras
       </h1>
-      <p class="text-sm text-slate-500 mt-1">Registra, edita y gestiona todas tus compras.</p>
+      <p class="text-sm mt-1" style="color: #6b7c5e;">Registra, edita y gestiona todas tus compras.</p>
     </div>
 
     <!-- FORM -->
-    <section class="bg-white border border-slate-200 rounded-2xl p-5 md:p-6 shadow-sm mb-8">
+    <section class="bg-white border rounded-2xl p-5 md:p-6 shadow-sm mb-8" style="border-color: #d4e0c8;">
       <div class="flex items-center gap-2 mb-5">
-        <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background: #eef3e8;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         </div>
-        <h2 class="text-lg font-bold text-slate-800">Nueva Compra</h2>
+        <h2 class="text-lg font-bold" style="color: #0f0e0b;">Nueva Compra</h2>
       </div>
       <form @submit.prevent="handleAddPurchase" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -112,15 +112,15 @@ const getTypeBadge = (p) => {
             <input v-model="newPurchase.date" type="date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-blue-500">
           </div>
         </div>
-        <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-100">
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-3" style="border-top: 1px solid #e6eedf;">
           <div class="flex items-center gap-5">
-            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-600"><input v-model="newPurchase.isMSI" type="checkbox" class="accent-blue-600 w-4 h-4"> MSI</label>
-            <select v-if="newPurchase.isMSI" v-model.number="newPurchase.months" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-sm outline-none">
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium" style="color: #6b7c5e;"><input v-model="newPurchase.isMSI" type="checkbox" style="accent-color: #5c8b32;" class="w-4 h-4"> MSI</label>
+            <select v-if="newPurchase.isMSI" v-model.number="newPurchase.months" class="rounded-lg px-2 py-1 text-sm outline-none" style="background: #f4f7f0; border: 1px solid #d4e0c8;">
               <option value="3">3m</option><option value="6">6m</option><option value="9">9m</option><option value="12">12m</option><option value="18">18m</option><option value="24">24m</option>
             </select>
-            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium text-purple-600"><input v-model="newPurchase.isRecurring" type="checkbox" class="accent-purple-600 w-4 h-4"> Recurrente</label>
+            <label class="flex items-center gap-2 cursor-pointer text-sm font-medium" style="color: #5c8b32;"><input v-model="newPurchase.isRecurring" type="checkbox" style="accent-color: #5c8b32;" class="w-4 h-4"> Recurrente</label>
           </div>
-          <button type="submit" :disabled="submitting" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl px-6 py-2.5 text-sm transition-all shadow-md active:scale-95 disabled:opacity-60 flex items-center gap-2">
+          <button type="submit" :disabled="submitting" class="text-white font-semibold rounded-xl px-6 py-2.5 text-sm transition-all shadow-md active:scale-95 disabled:opacity-60 flex items-center gap-2" style="background: #5c8b32;" @mouseenter="$event.target.style.background='#184000'" @mouseleave="$event.target.style.background='#5c8b32'">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
             {{ submitting ? 'Guardando...' : 'Registrar Compra' }}
           </button>
@@ -142,9 +142,9 @@ const getTypeBadge = (p) => {
 
     <!-- RECENT -->
     <section class="mb-8">
-      <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        Compras Recientes <span class="text-sm font-normal text-slate-400 ml-1">({{ filteredRecentPurchases.length }})</span>
+      <h2 class="text-base font-bold flex items-center gap-2 mb-4" style="color: #0f0e0b;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Compras Recientes <span class="text-sm font-normal ml-1" style="color: #8fa082;">({{ filteredRecentPurchases.length }})</span>
       </h2>
       <div v-if="filteredRecentPurchases.length === 0" class="flex flex-col items-center py-10 bg-white border border-dashed border-slate-200 rounded-2xl text-slate-400 text-sm">
         <span class="text-4xl mb-2 opacity-50">🛍️</span> No se encontraron compras.
@@ -154,8 +154,8 @@ const getTypeBadge = (p) => {
           <div class="flex-1 min-w-0">
             <p class="text-sm font-bold text-slate-800 truncate">{{ p.description }}</p>
             <div class="flex items-center gap-2 mt-1 flex-wrap">
-              <span class="text-[11px] font-semibold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">{{ p.cardName }}</span>
-              <span class="text-[11px] text-slate-400">{{ p.date }}</span>
+              <span class="text-[11px] font-semibold px-2 py-0.5 rounded" style="color: #5c8b32; background: #eef3e8;">{{ p.cardName }}</span>
+              <span class="text-[11px]" style="color: #8fa082;">{{ p.date }}</span>
               <span :class="['text-[10px] font-bold px-1.5 py-0.5 rounded uppercase', getTypeBadge(p).cls]">{{ getTypeBadge(p).label }}</span>
               <span class="text-[11px] text-slate-400">{{ p.category }}</span>
             </div>
@@ -163,7 +163,7 @@ const getTypeBadge = (p) => {
           <div class="flex flex-col items-end gap-1 shrink-0">
             <p class="text-sm font-extrabold text-rose-600">{{ formatMoney(p.amount) }}</p>
             <div class="flex gap-1">
-              <button @click="openEdit(p)" class="p-1 rounded text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-colors" title="Editar">
+              <button @click="openEdit(p)" class="p-1 rounded transition-colors" style="color: #8fa082;" @mouseenter="$event.target.style.color='#5c8b32'" @mouseleave="$event.target.style.color='#8fa082'" title="Editar">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
               </button>
               <button @click="openDelete(p)" class="p-1 rounded text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors" title="Eliminar">
@@ -177,8 +177,8 @@ const getTypeBadge = (p) => {
 
     <!-- PER CARD -->
     <section class="mb-8">
-      <h2 class="text-base font-bold text-slate-800 flex items-center gap-2 mb-4">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+      <h2 class="text-base font-bold flex items-center gap-2 mb-4" style="color: #0f0e0b;">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
         Compras por Tarjeta
       </h2>
       <div v-if="store.cards.length === 0" class="flex flex-col items-center py-10 bg-white border border-dashed border-slate-200 rounded-2xl text-slate-400 text-sm">

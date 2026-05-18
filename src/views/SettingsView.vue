@@ -13,23 +13,23 @@ const handleLogout = async () => {
   router.push('/login')
 }
 
-const appVersion = '1.0.0'
+const appVersion = '1.1.0'
 </script>
 
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2" style="color: #0f0e0b;">
         <span class="text-2xl">⚙️</span> Configuración
       </h1>
-      <p class="text-sm text-slate-500 mt-1">Ajustes de tu cuenta y la aplicación.</p>
+      <p class="text-sm mt-1" style="color: #6b7c5e;">Ajustes de tu cuenta y la aplicación.</p>
     </div>
 
     <div class="space-y-6 max-w-2xl">
       <!-- Account -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-        <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+      <div class="bg-white border rounded-2xl p-6 shadow-sm" style="border-color: #d4e0c8;">
+        <h2 class="text-base font-bold mb-4 flex items-center gap-2" style="color: #0f0e0b;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
           Cuenta
         </h2>
         <div class="space-y-3">
@@ -49,23 +49,23 @@ const appVersion = '1.0.0'
       </div>
 
       <!-- App Info -->
-      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-        <h2 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <div class="bg-white border rounded-2xl p-6 shadow-sm" style="border-color: #d4e0c8;">
+        <h2 class="text-base font-bold mb-4 flex items-center gap-2" style="color: #0f0e0b;">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Aplicación
         </h2>
         <div class="space-y-3">
-          <div class="flex items-center justify-between py-2 border-b border-slate-100">
-            <span class="text-sm text-slate-500">Versión</span>
-            <span class="text-sm font-semibold text-slate-800">v{{ appVersion }}</span>
+          <div class="flex items-center justify-between py-2 border-b" style="border-color: #e6eedf;">
+            <span class="text-sm" style="color: #6b7c5e;">Versión</span>
+            <span class="text-sm font-semibold" style="color: #0f0e0b;">v{{ appVersion }}</span>
           </div>
-          <div class="flex items-center justify-between py-2 border-b border-slate-100">
-            <span class="text-sm text-slate-500">Stack</span>
-            <span class="text-sm text-slate-600">Vue 3 + Vite + Firebase</span>
+          <div class="flex items-center justify-between py-2 border-b" style="border-color: #e6eedf;">
+            <span class="text-sm" style="color: #6b7c5e;">Stack</span>
+            <span class="text-sm" style="color: #0f0e0b;">Vue 3 + Vite + Firebase</span>
           </div>
           <div class="flex items-center justify-between py-2">
-            <span class="text-sm text-slate-500">PWA</span>
-            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Activa</span>
+            <span class="text-sm" style="color: #6b7c5e;">PWA</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded-full" style="color: #5c8b32; background: #eef3e8; border: 1px solid #c8ddb2;">Activa</span>
           </div>
         </div>
       </div>

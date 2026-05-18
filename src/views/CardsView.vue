@@ -34,23 +34,23 @@ const handleAddCard = async (cardData) => {
 <template>
   <div>
     <div class="mb-6">
-      <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight flex items-center gap-2">
+      <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-2" style="color: #0f0e0b;">
         <span class="text-2xl">💳</span> Mis Tarjetas
       </h1>
-      <p class="text-sm text-slate-500 mt-1">Gestiona todas tus tarjetas de crédito.</p>
+      <p class="text-sm mt-1" style="color: #6b7c5e;">Gestiona todas tus tarjetas de crédito.</p>
     </div>
 
     <!-- Actions -->
     <section class="mb-8 grid grid-cols-1 md:grid-cols-12 gap-6">
-      <div class="md:col-span-8 bg-white border border-slate-200 shadow-sm rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="md:col-span-8 bg-white border shadow-sm rounded-2xl p-6 flex flex-col md:flex-row justify-between items-center gap-4" style="border-color: #d4e0c8;">
         <div>
-          <h2 class="text-xl font-bold text-slate-800 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <h2 class="text-xl font-bold flex items-center" style="color: #0f0e0b;">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" style="color: #5c8b32;" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             Nueva Tarjeta
           </h2>
-          <p class="text-sm text-slate-500 mt-1">Registra una nueva cuenta para organizar tus gastos.</p>
+          <p class="text-sm mt-1" style="color: #6b7c5e;">Registra una nueva cuenta para organizar tus gastos.</p>
         </div>
-        <button @click="showAddModal = true" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg px-6 py-3 text-sm transition-all shadow-md active:scale-95 flex items-center gap-2 whitespace-nowrap">
+        <button @click="showAddModal = true" class="text-white font-semibold rounded-lg px-6 py-3 text-sm transition-all shadow-md active:scale-95 flex items-center gap-2 whitespace-nowrap" style="background: #5c8b32;" @mouseenter="$event.target.style.background='#184000'" @mouseleave="$event.target.style.background='#5c8b32'">
           Agregar Tarjeta
         </button>
       </div>
@@ -61,7 +61,7 @@ const handleAddCard = async (cardData) => {
 
     <!-- Loading -->
     <div v-if="store.loading" class="flex justify-center py-20">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2" style="border-color: #5c8b32;"></div>
     </div>
 
     <!-- Cards Grid -->
@@ -70,7 +70,7 @@ const handleAddCard = async (cardData) => {
     </div>
 
     <!-- Empty -->
-    <div v-else class="flex flex-col items-center justify-center py-16 text-slate-400 bg-white border border-slate-200 rounded-2xl border-dashed">
+    <div v-else class="flex flex-col items-center justify-center py-16 bg-white border border-dashed rounded-2xl" style="color: #8fa082; border-color: #d4e0c8;">
       <div class="text-6xl mb-4 opacity-50">🪪</div>
       <p class="text-lg font-medium">No se encontraron tarjetas.</p>
     </div>

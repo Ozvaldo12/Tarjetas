@@ -205,8 +205,8 @@ onUnmounted(() => {
   display: none;
   flex-direction: column;
   width: 260px;
-  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-  color: #e2e8f0;
+  background: linear-gradient(180deg, #082901 0%, #184000 100%);
+  color: #d6e8c4;
   transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: fixed;
   top: 0;
@@ -243,7 +243,7 @@ onUnmounted(() => {
 .sidebar__logo-text {
   font-weight: 800;
   font-size: 18px;
-  color: #f1f5f9;
+  color: #d6e8c4;
   white-space: nowrap;
   letter-spacing: -0.02em;
 }
@@ -252,15 +252,15 @@ onUnmounted(() => {
   flex-shrink: 0;
   padding: 6px;
   border-radius: 8px;
-  color: #94a3b8;
+  color: #8fbf45;
   transition: all 0.2s;
   background: transparent;
   border: none;
   cursor: pointer;
 }
 .sidebar__toggle:hover {
-  background: rgba(255,255,255,0.1);
-  color: #f1f5f9;
+  background: rgba(143,191,69,0.15);
+  color: #d6e8c4;
 }
 
 .sidebar__nav {
@@ -278,22 +278,22 @@ onUnmounted(() => {
   gap: 12px;
   padding: 12px;
   border-radius: 12px;
-  color: #94a3b8;
+  color: #a8c890;
   text-decoration: none;
   transition: all 0.2s;
   white-space: nowrap;
   overflow: hidden;
 }
 .sidebar__link:hover {
-  background: rgba(255,255,255,0.08);
-  color: #e2e8f0;
+  background: rgba(143,191,69,0.12);
+  color: #d6e8c4;
 }
 .sidebar__link--active {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background: rgba(143,191,69,0.22);
+  color: #8fbf45;
 }
 .sidebar__link--active .sidebar__icon {
-  color: #60a5fa;
+  color: #8fbf45;
 }
 
 .sidebar__icon {
@@ -323,13 +323,13 @@ onUnmounted(() => {
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #5c8b32, #8fbf45);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 14px;
-  color: white;
+  color: #082901;
   flex-shrink: 0;
 }
 
@@ -340,7 +340,7 @@ onUnmounted(() => {
 
 .sidebar__user-email {
   font-size: 12px;
-  color: #94a3b8;
+  color: #a8c890;
   overflow: hidden;
   text-overflow: ellipsis;
   margin: 0;
@@ -376,7 +376,7 @@ onUnmounted(() => {
   justify-content: space-between;
   padding: 12px 16px;
   background: white;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #d4e0c8;
   position: sticky;
   top: 0;
   z-index: 30;
@@ -395,7 +395,7 @@ onUnmounted(() => {
 .topbar__title {
   font-size: 18px;
   font-weight: 800;
-  color: #0f172a;
+  color: #0f0e0b;
   letter-spacing: -0.02em;
 }
 
@@ -409,13 +409,13 @@ onUnmounted(() => {
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, #5c8b32, #8fbf45);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 13px;
-  color: white;
+  color: #082901;
 }
 
 /* ===== PAGE CONTENT ===== */
@@ -439,7 +439,7 @@ onUnmounted(() => {
   right: 0;
   z-index: 40;
   background: white;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid #d4e0c8;
   padding: 6px 0;
   padding-bottom: max(6px, env(safe-area-inset-bottom));
 }
@@ -451,19 +451,19 @@ onUnmounted(() => {
   gap: 2px;
   padding: 6px 12px;
   border-radius: 10px;
-  color: #94a3b8;
+  color: #8fa082;
   text-decoration: none;
   transition: all 0.2s;
   min-width: 56px;
 }
 .bottom-nav__item:hover {
-  color: #64748b;
+  color: #5c8b32;
 }
 .bottom-nav__item--active {
-  color: #3b82f6;
+  color: #5c8b32;
 }
 .bottom-nav__item--active .bottom-nav__icon {
-  color: #3b82f6;
+  color: #5c8b32;
 }
 
 .bottom-nav__icon {
